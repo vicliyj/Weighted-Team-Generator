@@ -7,14 +7,13 @@
 
 using namespace std;
 
+// Helper function prototypes
+void printPlayers(); // Prints all players by level
+
 // Global vectors to hold all players by their skill levels
 vector<string> advanced{}; // Array of names of advanced level players
 vector<string> intermediate{}; // Array of names of all intermediate level players
 vector<string> beginner{}; // Array of names of all beginner level level players
-
-
-// Helper function prototypes
-void printPlayers(); // Prints all players by level
 
 int main () {
     int numberOfTeams = 0;
@@ -65,30 +64,41 @@ int main () {
     double numOfIntermediate = ceil(static_cast<double>(intermediate.size()) / numberOfTeams); // Splitting total number of intermediate players by requested number of teams
     double numOfAdvanced = ceil(static_cast<double>(advanced.size()) / numberOfTeams); // Splitting total number of advanced players by requested number of teams
 
+    int begIndex = 0;
+    
     //Printing randonmized players
     for (int i = 0; i < numberOfTeams; i++) {
-        cout << "TEAM " << i + 1 << ": "; // Printing team number
+        cout << "TEAM " << i + 1 << ": ";
 
-        // Printing "numOfBeginners" amount from "beginner" vector
-        for (int j = 0; j < numOfBeginners; j++) {
-            cout << beginner[j] << " ";
+        // Printing randomized beginners
+        for (begIndex; begIndex < begIndex + numOfBeginners; begIndex++) {
+            cout << beginner[begIndex] << " ";
         }
-        beginner.erase(beginner.begin(), beginner.begin() + numOfBeginners); // erasing those names from vector for next iteration
-        
-        // // Printing "numOfIntermediate" amount from "intermediate" vector
-        // for (int k = 0; k < numOfIntermediate; k++) {
-        //     cout << intermediate[k] << " ";
-        // }
-        // intermediate.erase(intermediate.begin(), intermediate.begin() + numOfIntermediate); // erasing those names from vector for next iteration
-        
-        // // Printing "numOfAdvanced" amount from "advanced" vector
-        // for (int l = 0; l < numOfBeginners; l++) {
-        //     cout << advanced[l] << " ";
-        // }
-        // advanced.erase(advanced.begin(), advanced.begin() + numOfAdvanced); // erasing those names from vector for next iteration
-        
-        cout << endl;
     }
+
+    // for (int i = 0; i < numberOfTeams; i++) {
+    //     cout << "TEAM " << i + 1 << ": "; // Printing team number
+
+    //     // Printing "numOfBeginners" amount from "beginner" vector
+    //     for (int j = 0; j < numOfBeginners; j++) {
+    //         cout << beginner[j] << " ";
+    //     }
+    //     beginner.erase(beginner.begin(), beginner.begin() + numOfBeginners); // erasing those names from vector for next iteration
+        
+    //     // // Printing "numOfIntermediate" amount from "intermediate" vector
+    //     // for (int k = 0; k < numOfIntermediate; k++) {
+    //     //     cout << intermediate[k] << " ";
+    //     // }
+    //     // intermediate.erase(intermediate.begin(), intermediate.begin() + numOfIntermediate); // erasing those names from vector for next iteration
+        
+    //     // // Printing "numOfAdvanced" amount from "advanced" vector
+    //     // for (int l = 0; l < numOfBeginners; l++) {
+    //     //     cout << advanced[l] << " ";
+    //     // }
+    //     // advanced.erase(advanced.begin(), advanced.begin() + numOfAdvanced); // erasing those names from vector for next iteration
+        
+    //     cout << endl;
+    // }
 
     return 0;
 }
