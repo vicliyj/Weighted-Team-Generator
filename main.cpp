@@ -9,22 +9,26 @@ using namespace std;
 
 // Helper function prototypes
 void printAllPlayers(); // Prints all players by level
-void printLevelIndex(int, int, vector<string>); // Print players from vector given starting index up until ending index.
+int printLevelIndex(int, int, vector<string>); // Print players from vector given starting index up until ending index.
 
 
 // Global vectors to hold all players by their skill levels
-vector<string> advanced; // Array of names of advanced level players
-vector<string> intermediate; // Array of names of all intermediate level players
-vector<string> beginner; // Array of names of all beginner level level players
+vector<string> advanced; // Vector of names of advanced level players
+vector<string> intermediate; // Vector of names of all intermediate level players
+vector<string> beginner; // Vector of names of all beginner level level players
 
 int main () {
     int numberOfTeams = 0;
+    int setsOfTeams = 0;
     bool notFinished = true;
     string player;
     int playerLevel;
 
-    cout << "How many teams?: ";
+    cout << "How many teams would you like to generate?: ";
     cin >> numberOfTeams;
+
+    cout << "How many SETS of teams would you like to generate?: ";
+    cin >> setsOfTeams;
     
     // While loop to input and sort players by their skill level
     while (notFinished) {
@@ -50,52 +54,58 @@ int main () {
         }
     }
 
-    // Shuffling Players
-    random_shuffle(beginner.begin(), beginner.end());
-    random_shuffle(intermediate.begin(), intermediate.end());
-    random_shuffle(advanced.begin(), advanced.end());
-
-    // Printing all players by level
-    printAllPlayers();
 
     // Calculating number of players per team from each skill level
     double numOfBeginners = ceil(static_cast<double>(beginner.size()) / numberOfTeams); // Splitting total number of beginner players by requested number of teams
     double numOfIntermediate = ceil(static_cast<double>(intermediate.size()) / numberOfTeams); // Splitting total number of intermediate players by requested number of teams
-    double numOfAdvanced = ceil(static_cast<double>(advanced.size()) / numberOfTeams); // Splitting total number of advanced players by requested number of teams
+    double numOfAdvanced = ceil(static_cast<double>(advanced.size()) / numberOfTeams); // Splitting total number of advanced players by requested number of teams  
+ 
+    // Calculating max number of players per team
+    double totalPlayers = beginner.size() + intermediate.size() + advanced.size();
+    int perTeam = ceil(static_cast<double>(totalPlayers / numberOfTeams));
 
-    cout << numOfBeginners << " " << numOfIntermediate << " " << numOfAdvanced << endl;
+    int currSet = 0;
     
-    int totalPlayers = beginner.size() + intermediate.size() + advanced.size();
-    int perTeam = totalPlayers / numberOfTeams;
-    
-    int startBeginner = 0;
-    int startIntermediate = 0;
-    int startAdvanced = 0;
-    int endBeginner = numOfBeginners;
-    int endIntermediate = numOfIntermediate;
-    int endAdvanced = numOfAdvanced;
+    while (currSet < setsOfTeams){
+        cout << "----- " << currSet + 1 << " -----" << endl;
+        currSet++;
 
-    
-    //Printing randonmized players
-    for (int i = 0; i < numberOfTeams; i++) {
-        cout << "TEAM " << i + 1 << ": ";
+        // Shuffling Players
+        shuffle(beginner.begin(), beginner.end(), default_random_engine());
+        shuffle(intermediate.begin(), intermediate.end(), default_random_engine());
+        shuffle(advanced.begin(), advanced.end(), default_random_engine());
+        
+        int startAdvanced = 0; 
+        int startBeginner = 0;
+        int startIntermediate = 0;
+        int endAdvanced = numOfAdvanced;
+        int endBeginner = numOfBeginners;
+        int endIntermediate = 0;
 
-        // Printing randomized beginner players
-        printLevelIndex(startBeginner, endBeginner, beginner);
-        startBeginner = endBeginner;
-        endBeginner += numOfBeginners;
+        //Printing randonmized players
+        for (int i = 0; i < numberOfTeams; i++) {
+            int currCount = 0;    
 
-        // Printing randomized intermediate players
-        printLevelIndex(startIntermediate, endIntermediate, intermediate);
-        startIntermediate = endIntermediate;
-        endIntermediate += numOfIntermediate;
+            cout << "   TEAM " << i + 1 << ": ";
 
-        // Printing randomized intermediate players
-        printLevelIndex(startAdvanced, endAdvanced, advanced);
-        startAdvanced = endAdvanced;
-        endAdvanced += numOfAdvanced;
+            // Printing randomized advanced players
+            currCount += printLevelIndex(startAdvanced, endAdvanced, advanced);
+            startAdvanced = endAdvanced;
+            endAdvanced += numOfAdvanced;
 
-        cout << endl;
+            // Printing randomized beginner players
+            currCount += printLevelIndex(startBeginner, endBeginner, beginner);
+            startBeginner = endBeginner;
+            endBeginner += numOfBeginners;
+
+            // Printing randomized intermediate players
+            int fillTeam = perTeam - currCount;
+            endIntermediate += fillTeam;
+            printLevelIndex(startIntermediate, endIntermediate, intermediate);
+            startIntermediate = endIntermediate;
+
+            cout << endl;
+        }
     }
 
     return 0;
@@ -118,12 +128,18 @@ void printAllPlayers() {
     }
 }
 
-void printLevelIndex(int begIndex, int endIndex, vector<string> level) {
+int printLevelIndex(int begIndex, int endIndex, vector<string> level) {
+    int printCount = 0;
+
     for (begIndex; begIndex < endIndex; begIndex++) {
         cout << level[begIndex] << " | "; 
+        
+        printCount += 1;
 
         if (begIndex + 1 == level.size()) {
             break;            
         } 
     }
+
+    return printCount;
 }
