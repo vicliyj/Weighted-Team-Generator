@@ -8,7 +8,7 @@
 using namespace std;
 
 // Helper function prototypes
-void printAllPlayers(); // Prints all players by level
+void printAllPlayers(); // Prints all players by level, used for debugging
 int printLevelIndex(int, int, vector<string>); // Print players from vector given starting index up until ending index.
 
 
@@ -56,13 +56,13 @@ int main () {
 
 
     // Calculating number of players per team from each skill level
-    double numOfBeginners = ceil(static_cast<double>(beginner.size()) / numberOfTeams); // Splitting total number of beginner players by requested number of teams
-    double numOfIntermediate = ceil(static_cast<double>(intermediate.size()) / numberOfTeams); // Splitting total number of intermediate players by requested number of teams
-    double numOfAdvanced = ceil(static_cast<double>(advanced.size()) / numberOfTeams); // Splitting total number of advanced players by requested number of teams  
+    double numOfBeginners = ceil(static_cast<double>(beginner.size()) / numberOfTeams);         // Splitting total number of beginner players by requested number of teams
+    double numOfIntermediate = ceil(static_cast<double>(intermediate.size()) / numberOfTeams);  // Splitting total number of intermediate players by requested number of teams
+    double numOfAdvanced = ceil(static_cast<double>(advanced.size()) / numberOfTeams);          // Splitting total number of advanced players by requested number of teams  
  
     // Calculating max number of players per team
-    double totalPlayers = beginner.size() + intermediate.size() + advanced.size();
-    int perTeam = ceil(static_cast<double>(totalPlayers / numberOfTeams));
+    double totalPlayers = beginner.size() + intermediate.size() + advanced.size();  // Calculating total number of players
+    int perTeam = totalPlayers / numberOfTeams;                                     // Calculating number of players PER TEAM
 
     int currSet = 0;
     
@@ -75,14 +75,20 @@ int main () {
         shuffle(intermediate.begin(), intermediate.end(), default_random_engine());
         shuffle(advanced.begin(), advanced.end(), default_random_engine());
         
-        int startAdvanced = 0; 
-        int startBeginner = 0;
-        int startIntermediate = 0;
-        int endAdvanced = numOfAdvanced;
-        int endBeginner = numOfBeginners;
-        int endIntermediate = 0;
+        // Variable Initializations
+        int startBeginner = 0;              // Variable that holds the starting index to print from in "beginner" vector
+        int startIntermediate = 0;          // Variable that holds the starting index to print from in "intermediate" vector
+        int startAdvanced = 0;              // Variable that holds the starting index to print from in "advanced" vector
+        int endBeginner = numOfBeginners;   // Variable that holds the ending index to print until in "beginner" vector
+        int endIntermediate = 0;            // Variable that holds the ending index to print until in "intermediate" vector
+        int endAdvanced = numOfAdvanced;    // Variable that holds the ending index to print until in "advanced" vector
 
-        //Printing randonmized players
+        // Printing randonmized players
+        // Autobalancing also occurs. For loop will print team members in a specific skill level order: advanced > beginner > intermediate
+        // Accounts for when total number of players in skill level doesn't divide evenly by max number of players PER TEAM.
+        // Algorithm will gurantee that advanced and beginners are always split evenly, filling the remaining spaces on the team
+        // with intermediate level players, which also ensures that overall skill level of each team is balanced.
+        // Currently DOES NOT handle when total number of players isn't evenly divisible by desired number of teams. 
         for (int i = 0; i < numberOfTeams; i++) {
             int currCount = 0;    
 
