@@ -114,7 +114,13 @@ int main () {
         }
     }
 
-    return 0;
+    char done;
+    cout << "Quit application (Y/N)?: ";
+    cin >> done;
+
+    if (done == 'Y' || done == 'y') {
+        return 0;
+    }
 }
 
 void printAllPlayers() {
